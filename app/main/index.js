@@ -1,6 +1,7 @@
 'use strict';
 const electron = require('electron');
 const utils = require('../utils/utils')
+const isOnline = require('is-online');
 const app = electron.app;
 const ipcMain = electron.ipcMain;
 const menu = electron.Menu;
@@ -42,6 +43,7 @@ ipcMain.on('openlink', (event,arg) => {
 })
 ipcMain.on('init', () => {
     utils.init();
+    utils.refresh();
 })
 ipcMain.on('auto-launch-open', ()=>{
     appLauncher.enable();
@@ -51,8 +53,7 @@ ipcMain.on('auto-launch-close', ()=>{
 })
 
 app.on('ready', () => {
-    utils.init();
-    menu.setApplicationMenu(menu.buildFromTemplate(template));
-    setInterval(()=>{utils.init()},(1000 * 60 * 10))
-    utils.autoUpdater();
+  utils.init();
+  utils.autoUpdater();
+  menu.setApplicationMenu(menu.buildFromTemplate(template));
 });
